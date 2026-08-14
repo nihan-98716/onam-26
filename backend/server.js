@@ -15,7 +15,13 @@ app.use(express.json());
 
 // Serve uploaded poster images from frontend/public/uploads
 const uploadsDir = path.join(__dirname, "..", "frontend", "public", "uploads");
-if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+try {
+  if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+  }
+} catch (err) {
+  console.warn("Could not create uploads directory (read-only filesystem expected on Vercel):", err.message);
+}
 app.use("/uploads", express.static(uploadsDir));
 
 const getDataDir = () => {
