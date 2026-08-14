@@ -20,7 +20,7 @@ import NotFoundPage from "./pages/NotFoundPage.jsx";
 const pageVariants = {
   initial: {
     opacity: 0,
-    y: 12,
+    y: 8,
   },
   in: {
     opacity: 1,
@@ -28,7 +28,7 @@ const pageVariants = {
   },
   out: {
     opacity: 0,
-    y: -12,
+    y: -8,
   },
 };
 
@@ -101,6 +101,14 @@ export default function App() {
         }}
       >
         <Navbar />
+
+        {/* Dimmed Static Background Image for Parallax Scroll (outside transition context) */}
+        {location.pathname !== "/" && (
+          <div 
+            className="fixed inset-0 bg-[url('/images/remb_mob.webp')] bg-cover bg-center bg-no-repeat bg-fixed pointer-events-none z-0 opacity-[0.20]"
+            style={{ filter: "brightness(0.6)" }}
+          />
+        )}
         
         {/* AnimatePresence coordinates entry and exit animations of child routes */}
         <AnimatePresence mode="wait">
