@@ -18,11 +18,19 @@ const uploadsDir = path.join(__dirname, "..", "frontend", "public", "uploads");
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 app.use("/uploads", express.static(uploadsDir));
 
+const getDataDir = () => {
+  const cwd = process.cwd();
+  if (cwd.endsWith("backend")) {
+    return path.join(cwd, "data");
+  }
+  return path.join(cwd, "backend", "data");
+};
+
 const dataFile = (name) =>
-  JSON.parse(fs.readFileSync(path.join(__dirname, "data", name), "utf-8"));
+  JSON.parse(fs.readFileSync(path.join(getDataDir(), name), "utf-8"));
 
 const saveFile = (name, data) => {
-  fs.writeFileSync(path.join(__dirname, "data", name), JSON.stringify(data, null, 2), "utf-8");
+  fs.writeFileSync(path.join(getDataDir(), name), JSON.stringify(data, null, 2), "utf-8");
 };
 
 // ======================================================================
