@@ -105,7 +105,7 @@ export default function App() {
         {/* Dimmed Static Background Image for Parallax Scroll (outside transition context) */}
         {location.pathname !== "/" && (
           <div 
-            className="fixed inset-0 bg-[url('/images/remb_mob.webp')] bg-cover bg-center bg-no-repeat bg-fixed pointer-events-none z-0 opacity-[0.20]"
+            className="fixed inset-0 bg-[url('/images/remb_mob.webp')] md:bg-[url('/images/rembg.webp')] bg-cover bg-center bg-no-repeat bg-fixed pointer-events-none z-0 opacity-[0.20]"
             style={{ filter: "brightness(0.6)" }}
           />
         )}
