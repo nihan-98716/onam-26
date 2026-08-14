@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import LoadingScreen from "./components/LoadingScreen.jsx";
 import LotusCursor from "./components/LotusCursor.jsx";
 import Navbar from "./components/Navbar.jsx";
@@ -14,6 +15,43 @@ import UpdatesPage from "./pages/UpdatesPage.jsx";
 import CoordinatorPage from "./pages/CoordinatorPage.jsx";
 import EventRegisterPage from "./pages/EventRegisterPage.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
+
+// Smooth page fade & glide transitions
+const pageVariants = {
+  initial: {
+    opacity: 0,
+    y: 12,
+  },
+  in: {
+    opacity: 1,
+    y: 0,
+  },
+  out: {
+    opacity: 0,
+    y: -12,
+  },
+};
+
+const pageTransition = {
+  type: "tween",
+  ease: "easeInOut",
+  duration: 0.35,
+};
+
+function AnimatedPage({ children }) {
+  return (
+    <motion.div
+      initial="initial"
+      animate="in"
+      exit="out"
+      variants={pageVariants}
+      transition={pageTransition}
+      className="w-full"
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 export default function App() {
   const [loaded, setLoaded] = useState(false);
@@ -63,19 +101,23 @@ export default function App() {
         }}
       >
         <Navbar />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/events" element={<EventsPage />} />
-          <Route path="/events/movie" element={<MovieEventPage />} />
-          <Route path="/events/dj" element={<DJEventPage />} />
-          <Route path="/events/:id/register" element={<EventRegisterPage />} />
-          <Route path="/coordinator" element={<CoordinatorPage />} />
-          <Route path="/store" element={<StorePage />} />
-          <Route path="/gallery" element={<GalleryPage />} />
-          <Route path="/updates" element={<UpdatesPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+        
+        {/* AnimatePresence coordinates entry and exit animations of child routes */}
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<AnimatedPage><HomePage /></AnimatedPage>} />
+            <Route path="/about" element={<AnimatedPage><AboutPage /></AnimatedPage>} />
+            <Route path="/events" element={<AnimatedPage><EventsPage /></AnimatedPage>} />
+            <Route path="/events/movie" element={<AnimatedPage><MovieEventPage /></AnimatedPage>} />
+            <Route path="/events/dj" element={<AnimatedPage><DJEventPage /></AnimatedPage>} />
+            <Route path="/events/:id/register" element={<AnimatedPage><EventRegisterPage /></AnimatedPage>} />
+            <Route path="/coordinator" element={<AnimatedPage><CoordinatorPage /></AnimatedPage>} />
+            <Route path="/store" element={<AnimatedPage><StorePage /></AnimatedPage>} />
+            <Route path="/gallery" element={<AnimatedPage><GalleryPage /></AnimatedPage>} />
+            <Route path="/updates" element={<AnimatedPage><UpdatesPage /></AnimatedPage>} />
+            <Route path="*" element={<AnimatedPage><NotFoundPage /></AnimatedPage>} />
+          </Routes>
+        </AnimatePresence>
       </div>
     </>
   );
