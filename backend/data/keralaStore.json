@@ -1,0 +1,4 @@
+[
+  { "id": 1, "name": "Jasmine Flower Roll", "malayalam": "Mullappoo", "price": 50, "unit": "per roll", "note": "Freshly strung jasmine, sold each morning at the store counter." },
+  { "id": 2, "name": "Mehendi Cone", "malayalam": "Mailanchi", "price": 30, "unit": "per cone", "note": "Traditional henna cone, perfect for the festival's ethnic-wear days." }
+]

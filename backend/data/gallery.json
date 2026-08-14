@@ -1,0 +1,10 @@
+[
+  { "id": 1, "caption": "Eco Pookalam in progress", "tone": "gold", "tall": true },
+  { "id": 2, "caption": "Maveli's procession", "tone": "maroon", "tall": false },
+  { "id": 3, "caption": "Chendamelam ensemble", "tone": "green", "tall": false },
+  { "id": 4, "caption": "Onasadya on banana leaf", "tone": "ivory", "tall": true },
+  { "id": 5, "caption": "Thiruvathira performance", "tone": "gold", "tall": false },
+  { "id": 6, "caption": "Lighting of the nilavilakku", "tone": "maroon", "tall": true },
+  { "id": 7, "caption": "Tug of war on the lawns", "tone": "green", "tall": false },
+  { "id": 8, "caption": "DJ Night closing set", "tone": "ivory", "tall": false }
+]

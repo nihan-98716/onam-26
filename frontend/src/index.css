@@ -1,0 +1,192 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --kasavu: #d4af37;
+  --maroon: #b3121c;
+  --noir: #0a0908;
+  --ivory: #f5ede1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--noir);
+  color: var(--ivory);
+  font-family: "Manrope", sans-serif;
+  cursor: none;
+  overflow-x: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+a, button, [role="button"], [class*="cursor-pointer"], select, input, textarea {
+  cursor: none !important;
+}
+
+@media (max-width: 768px) {
+  body {
+    cursor: auto;
+  }
+  a, button, [role="button"], [class*="cursor-pointer"], select, input, textarea {
+    cursor: auto !important;
+  }
+  .lotus-cursor {
+    display: none !important;
+  }
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: "Cinzel", serif;
+  letter-spacing: 0.01em;
+}
+
+/* ---------- Kerala kasavu border motif, now gold-on-black ---------- */
+.kasavu-border {
+  position: relative;
+}
+.kasavu-border::after {
+  content: "";
+  display: block;
+  height: 6px;
+  margin: 0 auto;
+  width: 96px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--kasavu) 0 8px,
+    transparent 8px 14px
+  );
+  opacity: 0.9;
+  border-radius: 3px;
+}
+
+/* ---------- Custom lotus cursor ---------- */
+.lotus-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 26px;
+  height: 26px;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s ease-out, opacity 0.2s ease;
+  will-change: transform;
+}
+
+/* ---------- Floating petals ---------- */
+.petal {
+  position: absolute;
+  top: -5%;
+  pointer-events: none;
+  opacity: 0.9;
+  animation-name: petal-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+@keyframes petal-fall {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(30px, 55vh) rotate(180deg);
+  }
+  100% {
+    transform: translate(-20px, 110vh) rotate(360deg);
+  }
+}
+
+/* ---------- Ripple button ---------- */
+.ripple-btn {
+  position: relative;
+  overflow: hidden;
+}
+.ripple-btn span.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple-anim 600ms ease-out;
+  background: rgba(212, 175, 55, 0.45);
+  pointer-events: none;
+}
+@keyframes ripple-anim {
+  to {
+    transform: scale(3.2);
+    opacity: 0;
+  }
+}
+
+/* ---------- Card float ---------- */
+.float-card {
+  transition: box-shadow 0.35s ease, border-color 0.35s ease;
+}
+.float-card:hover {
+  box-shadow: 0 20px 45px -18px rgba(212, 175, 55, 0.35);
+  border-color: rgba(212, 175, 55, 0.6);
+}
+
+/* ---------- Glass panel, dark + gold hairline ---------- */
+.glass {
+  background: rgba(20, 15, 12, 0.6);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+/* ---------- Hide Scrollbar Globally ---------- */
+::-webkit-scrollbar {
+  display: none !important;
+}
+
+html, body {
+  -ms-overflow-style: none !important;  /* IE and Edge */
+  scrollbar-width: none !important;  /* Firefox */
+}
+
+/* ---------- Horizontal snap-scroll carousel (gallery) ---------- */
+.snap-row {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.snap-item {
+  scroll-snap-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes musicBar {
+  0%, 100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+/* Globally disable image selection, copying, and dragging for all images */
+img {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-user-drag: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+}

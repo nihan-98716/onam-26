@@ -1,0 +1,80 @@
+[
+  {
+    "id": 1784709362516,
+    "title": "Onam Teaser",
+    "time": "17 July, 3:30 PM",
+    "description": "A short performance preview to open the festival and set the tone for the days ahead.",
+    "icon": "drum",
+    "category": "Opening",
+    "venue": "Main Quadrangle",
+    "poster": "",
+    "link": "",
+    "badge": ""
+  },
+  {
+    "id": 1784709362543,
+    "title": "Eco Friendly Pookalam Competition",
+    "time": "18 July, 9:00 AM",
+    "description": "Departments compete laying flower carpets using only biodegradable petals.",
+    "icon": "flower",
+    "category": "Competition",
+    "venue": "Central Atrium",
+    "poster": "",
+    "link": "",
+    "badge": ""
+  },
+  {
+    "id": 1784709362569,
+    "title": "Chendamelam & Maveli Procession",
+    "time": "20 July, 9:00 AM",
+    "description": "King Mahabali's ceremonial procession through campus, led in by a thunderous traditional percussion ensemble.",
+    "icon": "crown",
+    "category": "Procession",
+    "venue": "Campus Grounds",
+    "poster": "/images/theyyam.png",
+    "link": "",
+    "badge": ""
+  },
+  {
+    "id": 1784709362593,
+    "title": "Cultural Performances & Sadya",
+    "time": "20 July, 11:00 AM onwards",
+    "description": "Classical and folk performances, traditional Onam games on the lawns, and a grand Sadya served on banana leaf.",
+    "icon": "dance",
+    "category": "Culture",
+    "venue": "Main Auditorium & Lawns",
+    "poster": "/images/kathakali.png",
+    "link": "",
+    "badge": ""
+  },
+  {
+    "id": 1784709362623,
+    "title": "DJ Night",
+    "time": "20 July, 8:00 PM onwards",
+    "description": "The main-day celebrations close with a high-energy open-air set on the main stage.",
+    "icon": "music",
+    "category": "Booking Required",
+    "venue": "Main Stage",
+    "poster": "/images/dj_night_poster.png",
+    "link": "/events/dj",
+    "badge": "Book Ticket",
+    "registrationRequired": true,
+    "paymentRequired": true,
+    "price": 0
+  },
+  {
+    "id": 1784709362645,
+    "title": "Movie Night",
+    "time": "29 – 31 July",
+    "description": "Three nights of outdoor movie screenings in the Amritamayi Hall auditorium.",
+    "icon": "movie",
+    "category": "Booking Required",
+    "venue": "Amritamayi Hall",
+    "poster": "/images/dhurandhar.jpeg",
+    "link": "https://theticket9.com/event/movie-night-4-dhurandhar",
+    "badge": "Book Seats",
+    "registrationRequired": true,
+    "paymentRequired": true,
+    "price": 100
+  }
+]

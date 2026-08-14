@@ -1,0 +1,18 @@
+[
+  { "id": 1, "group": "Student Head", "name": "Surya Narayanan KP", "role": "Student Head", "image": "/images/team/Suryanarayanan KP.jpeg" },
+  { "id": 2, "group": "Finance", "name": "Shreya Krishna", "role": "Finance", "image": "/images/team/Shreya Krishna.jpeg" },
+  { "id": 3, "group": "Finance", "name": "Adithi Suresh", "role": "Finance", "image": "/images/team/Adithi Suresh.jpeg" },
+  { "id": 4, "group": "Finance", "name": "Neeraja P", "role": "Finance", "image": "/images/team/Neeraja P.jpeg" },
+  { "id": 5, "group": "Finance", "name": "Parvathy KS", "role": "Finance", "image": "/images/team/Parvathy KS.jpeg" },
+  { "id": 6, "group": "Marketing & Promotion", "name": "Jagannath Nair", "role": "Marketing and Promotion", "image": "/images/team/Jagannath Nair.jpeg" },
+  { "id": 7, "group": "Culturals & Games", "name": "Adithyan VJ", "role": "Culturals and Games", "image": "/images/team/Adithyan VJ.jpeg" },
+  { "id": 8, "group": "Culturals & Games", "name": "Prarthana Thyagi", "role": "Culturals and Games", "image": "/images/team/Prarthana Thyagi.jpeg" },
+  { "id": 9, "group": "Stalls", "name": "Shruthika Rajan", "role": "Stalls", "image": "/images/team/Shruthika Rajan.jpeg" },
+  { "id": 10, "group": "Stalls", "name": "Vishal Purushothama", "role": "Stalls", "image": "/images/team/Vishal.jpeg" },
+  { "id": 11, "group": "Media", "name": "Brahmadath", "role": "Media", "image": "/images/team/Brahmadath.jpeg" },
+  { "id": 12, "group": "Technical", "name": "Nihan Anoop", "role": "Technical", "image": "/images/team/Nihan Anoop.jpeg" },
+  { "id": 13, "group": "Technical", "name": "Soorya Narayanan KC", "role": "Technical", "image": "/images/team/Sooryanarayan KC.jpeg" },
+  { "id": 14, "group": "Logistics", "name": "Sooraj Sreemon K", "role": "Logistics", "image": "/images/team/Sooraj Sreemon K.jpeg" },
+  { "id": 15, "group": "Decoration", "name": "Swetha", "role": "Decoration", "image": "/images/team/Swetha M.jpeg" },
+  { "id": 16, "group": "Decoration", "name": "Sreenanda Achuthan", "role": "Decoration", "image": "/images/team/Sreenanda Achuthan.jpeg" }
+]

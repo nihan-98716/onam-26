@@ -1,0 +1,13 @@
+{
+  "name": "aarpo-fullstack",
+  "version": "1.0.0",
+  "description": "Fullstack deployment entry for AARPO'26 website",
+  "main": "backend/server.js",
+  "scripts": {
+    "install:backend": "npm --prefix backend install",
+    "install:frontend": "npm --prefix frontend install",
+    "build:frontend": "npm --prefix frontend run build",
+    "build": "npm run install:backend && npm run install:frontend && npm run build:frontend",
+    "start": "npm --prefix backend start"
+  }
+}
