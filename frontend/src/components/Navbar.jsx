@@ -10,6 +10,50 @@ const LINKS = [
   { label: "TEAM", to: "/updates#team" },
 ];
 
+const menuVariants = {
+  closed: {
+    height: 0,
+    opacity: 0,
+    transition: {
+      height: { duration: 0.3, ease: "easeInOut" },
+      opacity: { duration: 0.25 },
+      staggerChildren: 0.03,
+      staggerDirection: -1,
+    }
+  },
+  open: {
+    height: "auto",
+    opacity: 1,
+    transition: {
+      height: { duration: 0.3, ease: "easeInOut" },
+      opacity: { duration: 0.25 },
+      staggerChildren: 0.05,
+      delayChildren: 0.05,
+    }
+  }
+};
+
+const linkVariants = {
+  closed: {
+    x: 35,
+    opacity: 0,
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 30
+    }
+  },
+  open: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 30
+    }
+  }
+};
+
 export default function Navbar() {
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
@@ -123,28 +167,29 @@ export default function Navbar() {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            variants={menuVariants}
+            initial="closed"
+            animate="open"
+            exit="closed"
             className="overflow-hidden border-t border-white/10 bg-transparent px-6 pb-6 pt-3 lg:hidden"
           >
             {LINKS.map((link) => (
-              <NavLink
-                key={link.to}
-                to={link.to}
-                onClick={() => setOpen(false)}
-                className={({ isActive }) =>
-                  `block py-2.5 text-center font-display text-xs font-semibold tracking-wider uppercase ${
-                    isActive ? "text-kasavu" : "text-ivory/80"
-                  }`
-                }
-              >
-                {link.label}
-              </NavLink>
+              <motion.div key={link.to} variants={linkVariants}>
+                <NavLink
+                  to={link.to}
+                  onClick={() => setOpen(false)}
+                  className={({ isActive }) =>
+                    `block py-2.5 text-center font-display text-xs font-semibold tracking-wider uppercase ${
+                      isActive ? "text-kasavu" : "text-ivory/80"
+                    }`
+                  }
+                >
+                  {link.label}
+                </NavLink>
+              </motion.div>
             ))}
             {/* Mobile Social Links */}
-            <div className="mt-4 flex justify-center gap-6 border-t border-white/5 pt-4">
+            <motion.div variants={linkVariants} className="mt-4 flex justify-center gap-6 border-t border-white/5 pt-4">
               <a href="https://www.instagram.com/onam.avv/" target="_blank" rel="noreferrer" className="text-kasavu hover:text-maroon transition-colors p-1">
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
@@ -157,7 +202,7 @@ export default function Navbar() {
                   <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
                 </svg>
               </a>
-            </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

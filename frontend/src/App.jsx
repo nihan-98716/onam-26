@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import LoadingScreen from "./components/LoadingScreen.jsx";
@@ -56,6 +56,75 @@ function AnimatedPage({ children }) {
 export default function App() {
   const [loaded, setLoaded] = useState(false);
   const location = useLocation();
+  const sparksCanvasRef = useRef(null);
+
+  useEffect(() => {
+    if (location.pathname === "/") return;
+    const canvas = sparksCanvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    let animationFrameId;
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = canvas.height + Math.random() * 50;
+        this.vx = (Math.random() - 0.5) * 0.4;
+        this.vy = -0.4 - Math.random() * 0.8;
+        this.radius = 0.5 + Math.random() * 1.8;
+        this.alpha = 0.1 + Math.random() * 0.55;
+        this.fadeSpeed = 0.0015 + Math.random() * 0.004;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.alpha -= this.fadeSpeed;
+        if (this.alpha <= 0 || this.y < 0) {
+          this.reset();
+        }
+      }
+
+      draw() {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(212, 175, 55, ${this.alpha})`;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = "#D4AF37";
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    const particles = Array.from({ length: 25 }, () => new Particle());
+
+    const render = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p) => {
+        p.update();
+        p.draw();
+      });
+      animationFrameId = requestAnimationFrame(render);
+    };
+    render();
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener("resize", resizeCanvas);
+    };
+  }, [location.pathname]);
 
   useEffect(() => {
     const handleContextMenu = (e) => {
@@ -104,10 +173,17 @@ export default function App() {
 
         {/* Dimmed Static Background Image for Parallax Scroll (outside transition context) */}
         {location.pathname !== "/" && (
-          <div 
-            className="fixed inset-0 bg-[url('/images/remb_mob.webp')] md:bg-[url('/images/rembg.webp')] bg-cover bg-center bg-no-repeat bg-fixed pointer-events-none z-0 opacity-[0.20]"
-            style={{ filter: "brightness(0.6)" }}
-          />
+          <>
+            <div 
+              className="fixed inset-0 bg-[url('/images/remb_mob.webp')] md:bg-[url('/images/rembg.webp')] bg-cover bg-center bg-no-repeat bg-fixed pointer-events-none z-0 opacity-[0.20]"
+              style={{ filter: "brightness(0.6)" }}
+            />
+            {/* Golden Embers Canvas */}
+            <canvas
+              ref={sparksCanvasRef}
+              className="fixed inset-0 pointer-events-none z-0"
+            />
+          </>
         )}
         
         {/* AnimatePresence coordinates entry and exit animations of child routes */}

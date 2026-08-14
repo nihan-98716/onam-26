@@ -26,9 +26,9 @@ export default function Team() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.1 }}
-                  transition={{ duration: 0.4, delay: i * 0.02 }}
+                  transition={{ duration: 0.5, delay: i * 0.06 }}
                   whileHover={{ y: -6 }}
-                  className="float-card relative w-full sm:w-64 max-w-sm rounded-2xl border border-kasavu/15 bg-charcoal p-6 text-center overflow-hidden group/card"
+                  className="relative w-full sm:w-64 max-w-sm rounded-2xl glass-card p-6 text-center overflow-hidden group/card"
                 >
                   {/* Traditional Golden Corner Borders */}
                   <div className="absolute top-2.5 left-2.5 h-3.5 w-3.5 border-t-2 border-l-2 border-kasavu/50 rounded-tl-sm transition-all duration-300 group-hover/card:border-kasavu pointer-events-none" />
@@ -37,7 +37,7 @@ export default function Team() {
                   <div className="absolute bottom-2.5 right-2.5 h-3.5 w-3.5 border-b-2 border-r-2 border-kasavu/50 rounded-br-sm transition-all duration-300 group-hover/card:border-kasavu pointer-events-none" />
  
                   {/* Premium Profile Image with Golden Border */}
-                  <div className="relative mx-auto mb-4 h-24 w-24 overflow-hidden rounded-full border-2 border-kasavu bg-charcoal shadow-lg shadow-black/60 group-hover/card:scale-105 transition-transform duration-300">
+                  <div className="relative mx-auto mb-4 h-24 w-24 overflow-hidden rounded-full border-2 border-kasavu bg-black/40 shadow-lg shadow-black/60 group-hover/card:scale-105 group-hover/card:shadow-[0_0_15px_rgba(212,175,55,0.4)] transition-all duration-300">
                     {p.image ? (
                       <img
                         src={p.image}

@@ -58,7 +58,7 @@ export default function KeralaStore() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
-              className="float-card rounded-2xl border border-kasavu/20 bg-noir p-6"
+              className="rounded-2xl border border-kasavu/20 glass-card p-6"
             >
               <div className="flex items-start justify-between">
                 <div>

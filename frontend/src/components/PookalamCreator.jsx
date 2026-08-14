@@ -81,6 +81,83 @@ export default function PookalamCreator() {
   const [symmetry, setSymmetry] = useState("8-fold");
   const [pookalam, setPookalam] = useState({});
   const svgRef = useRef(null);
+  const particleCanvasRef = useRef(null);
+  const particlesRef = useRef([]);
+  const animationFrameRef = useRef(null);
+
+  const spawnParticles = (x, y, color) => {
+    if (color === "transparent" || !color) return; // Don't spawn particles for eraser
+    const canvas = particleCanvasRef.current;
+    if (!canvas) return;
+
+    const count = 15;
+    const newParticles = [];
+
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 0.5 + Math.random() * 1.5;
+      newParticles.push({
+        x,
+        y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - 0.2,
+        radius: 2.5 + Math.random() * 4.5,
+        alpha: 1.0,
+        decay: 0.008 + Math.random() * 0.012,
+        color,
+        rotation: Math.random() * 360,
+        rotationSpeed: (Math.random() - 0.5) * 4,
+      });
+    }
+
+    particlesRef.current = [...particlesRef.current, ...newParticles];
+
+    if (!animationFrameRef.current) {
+      const ctx = canvas.getContext("2d");
+      const update = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        const active = [];
+        particlesRef.current.forEach((p) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.03; // gravity
+          p.alpha -= p.decay;
+          p.rotation += p.rotationSpeed;
+
+          if (p.alpha > 0) {
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.rotation * Math.PI) / 180);
+            ctx.beginPath();
+            
+            // Draw organic teardrop/petal shape
+            ctx.moveTo(0, -p.radius);
+            ctx.quadraticCurveTo(p.radius * 0.5, -p.radius * 0.25, 0, p.radius);
+            ctx.quadraticCurveTo(-p.radius * 0.5, -p.radius * 0.25, 0, -p.radius);
+            
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = p.alpha;
+            ctx.shadowBlur = 3;
+            ctx.shadowColor = p.color;
+            ctx.fill();
+            ctx.restore();
+            
+            active.push(p);
+          }
+        });
+
+        particlesRef.current = active;
+
+        if (active.length > 0) {
+          animationFrameRef.current = requestAnimationFrame(update);
+        } else {
+          animationFrameRef.current = null;
+        }
+      };
+      update();
+    }
+  };
 
   // Concentric rings configuration for radial patterns - reduced to 4 rings
   const RINGS = [
@@ -109,7 +186,13 @@ export default function PookalamCreator() {
     return cells;
   }, []);
 
-  const handleCellClick = (ring, index, count) => {
+  const handleCellClick = (ring, index, count, e) => {
+    if (e && svgRef.current) {
+      const rect = svgRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      spawnParticles(x, y, selectedColor.hex);
+    }
     const updated = { ...pookalam };
     const indicesToColor = [];
 
@@ -145,7 +228,13 @@ export default function PookalamCreator() {
     setPookalam(updated);
   };
 
-  const handleGridClick = (r, c) => {
+  const handleGridClick = (r, c, e) => {
+    if (e && svgRef.current) {
+      const rect = svgRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      spawnParticles(x, y, selectedColor.hex);
+    }
     const updated = { ...pookalam };
     const coordinatesToColor = [];
 
@@ -318,7 +407,7 @@ export default function PookalamCreator() {
                       stroke="rgba(255,255,255,0.06)"
                       strokeWidth="1"
                       className="cursor-pointer transition-colors duration-150 hover:fill-kasavu/20"
-                      onClick={() => handleCellClick(ring, idx, count)}
+                      onClick={(e) => handleCellClick(ring, idx, count, e)}
                     />
                   );
                 });
@@ -342,7 +431,7 @@ export default function PookalamCreator() {
                       stroke="rgba(255,255,255,0.08)"
                       strokeWidth="0.8"
                       className="cursor-pointer transition-colors duration-150 hover:fill-kasavu/20"
-                      onClick={() => handleCellClick(ring, idx, count)}
+                      onClick={(e) => handleCellClick(ring, idx, count, e)}
                     />
                   );
                 });
@@ -364,7 +453,7 @@ export default function PookalamCreator() {
                     stroke="rgba(255,255,255,0.04)"
                     strokeWidth="0.8"
                     className="cursor-pointer transition-colors duration-150 hover:fill-kasavu/20"
-                    onClick={() => handleGridClick(r, c)}
+                    onClick={(e) => handleGridClick(r, c, e)}
                   />
                 );
               })}
@@ -379,10 +468,16 @@ export default function PookalamCreator() {
                   stroke="rgba(255,255,255,0.1)"
                   strokeWidth="1.2"
                   className="cursor-pointer transition-colors duration-150 hover:fill-kasavu/20"
-                  onClick={() => handleCellClick(0, 0, 1)}
+                  onClick={(e) => handleCellClick(0, 0, 1, e)}
                 />
               )}
             </svg>
+            <canvas
+              ref={particleCanvasRef}
+              width="360"
+              height="360"
+              className="absolute inset-4 pointer-events-none z-20 rounded-full"
+            />
             <div className="pointer-events-none absolute -inset-2 rounded-full border border-kasavu/10 animate-spin-slow" />
           </div>
         </div>

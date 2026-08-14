@@ -141,8 +141,34 @@ export default function Timeline() {
       ) : (
         /* Alternating Vertical Timeline with Glowing Kasavu Thread */
         <div className="relative mx-auto mt-16 max-w-5xl px-4">
-          {/* Straight guideline for mobile timeline */}
-          <div className="absolute left-6 top-0 bottom-0 w-[3px] -translate-x-1/2 bg-kasavu/35 md:hidden pointer-events-none z-0" />
+          {/* Mobile Animated Line (mobile only) */}
+          <svg
+            className="absolute left-6 top-0 bottom-0 w-[10px] h-full -translate-x-1/2 md:hidden pointer-events-none z-0"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox={`0 0 10 ${filteredItems.length * ROW_HEIGHT}`}
+            preserveAspectRatio="none"
+          >
+            <motion.path
+              d={`M 5 0 L 5 ${filteredItems.length * ROW_HEIGHT}`}
+              fill="none"
+              stroke="#D4AF37"
+              strokeWidth="3.5"
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.8, ease: "easeInOut" }}
+              style={{ filter: "drop-shadow(0 0 6px rgba(212, 175, 55, 0.7))" }}
+            />
+            <motion.path
+              d={`M 5 0 L 5 ${filteredItems.length * ROW_HEIGHT}`}
+              fill="none"
+              stroke="#B3121C"
+              strokeWidth="2"
+              strokeDasharray="10,15"
+              animate={{ strokeDashoffset: [0, -100] }}
+              transition={{ repeat: Infinity, ease: "linear", duration: 5 }}
+            />
+          </svg>
 
           {/* Single Continuous Wavy Kasavu River Path (desktop only) */}
           <svg
@@ -151,19 +177,25 @@ export default function Timeline() {
             viewBox={`0 0 1000 ${filteredItems.length * ROW_HEIGHT}`}
             preserveAspectRatio="none"
           >
-            <path
+            <motion.path
               d={generateRiverPath(filteredItems.length, ROW_HEIGHT)}
               fill="none"
               stroke="#D4AF37"
               strokeWidth="4.5"
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.8, ease: "easeInOut" }}
               style={{ filter: "drop-shadow(0 0 8px rgba(212, 175, 55, 0.8))" }}
             />
-            <path
+            <motion.path
               d={generateRiverPath(filteredItems.length, ROW_HEIGHT)}
               fill="none"
               stroke="#B3121C"
               strokeWidth="2.5"
-              strokeDasharray="4,4"
+              strokeDasharray="12,18"
+              animate={{ strokeDashoffset: [0, -120] }}
+              transition={{ repeat: Infinity, ease: "linear", duration: 6 }}
             />
           </svg>
 
@@ -192,10 +224,10 @@ export default function Timeline() {
                     <div className="w-full md:w-[45%] flex flex-col pl-12 md:pl-0">
                       <CardWrapper
                         {...wrapperProps}
-                        className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl border p-6 transition-all duration-500 ${
+                        className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl border p-6 transition-all duration-500 glass-card hover:-translate-y-2 ${
                           isBooking
-                            ? "border-kasavu/40 bg-gradient-to-b from-maroon/20 via-black/80 to-black/90 shadow-[0_4px_25px_rgba(179,18,28,0.15)] hover:-translate-y-2 hover:border-kasavu hover:shadow-[0_12px_35px_rgba(212,175,55,0.3)] cursor-pointer"
-                            : "border-white/10 bg-black/60 backdrop-blur-xl hover:-translate-y-2 hover:border-kasavu/60 hover:bg-black/80 hover:shadow-[0_10px_30px_rgba(212,175,55,0.2)]"
+                            ? "border-kasavu/40 hover:border-kasavu shadow-[0_4px_25px_rgba(179,18,28,0.15)] hover:shadow-[0_12px_35px_rgba(212,175,55,0.3)] cursor-pointer"
+                            : "border-white/10 hover:border-kasavu/60"
                         }`}
                       >
                         {/* Top Ambient Glow */}
@@ -280,9 +312,10 @@ export default function Timeline() {
                     </div>
 
                     {/* Wavy Placement Event Node (sits on the apex of the Bezier wave segment) */}
-                    <div className={`absolute left-6 top-4 md:top-1/2 -translate-x-1/2 md:-translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full border border-kasavu bg-noir shadow-lg shadow-black/80 z-10 transition-transform duration-300 hover:scale-110 ${
+                    <div className={`absolute left-6 top-4 md:top-1/2 -translate-x-1/2 md:-translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full border border-kasavu bg-noir shadow-lg shadow-black/80 z-10 transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(212,175,55,0.6)] ${
                       index % 2 === 0 ? "md:left-[42.5%]" : "md:left-[57.5%]"
                     }`}>
+                      <span className="absolute inset-0 rounded-full border border-kasavu/30 animate-ping opacity-75 pointer-events-none" />
                       <div className="h-7 w-7 flex items-center justify-center bg-kasavu/10 border border-kasavu/30 rounded-full">
                         <EventIcon icon={item.icon} />
                       </div>
