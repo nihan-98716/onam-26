@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 const LINKS = [
   { label: "HOME", to: "/" },
@@ -40,9 +41,13 @@ export default function Navbar() {
   }, [lastScrollY]);
 
   return (
-    <nav className={`fixed top-0 z-50 w-full transition-transform duration-300 ${
+    <nav className={`fixed top-0 z-50 w-full transition-all duration-300 ${
       visible ? "translate-y-0" : "-translate-y-full"
-    } ${solid ? "bg-black/90 shadow-md backdrop-blur-sm" : "bg-transparent"}`}>
+    } ${
+      open 
+        ? "bg-black/40 backdrop-blur-xl border-b border-white/[0.06] shadow-2xl" 
+        : `border-b border-transparent ${solid ? "bg-black/90 shadow-md backdrop-blur-sm" : "bg-transparent"}`
+    }`}>
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1 sm:py-2 sm:px-6 lg:px-8">
         {/* Left Side: Logo */}
         <NavLink to="/" className="flex items-center group">
@@ -91,51 +96,71 @@ export default function Navbar() {
 
         {/* Mobile Menu Button */}
         <button
-          className="rounded-full border border-kasavu/40 p-2 lg:hidden"
+          className="rounded-full border border-kasavu/40 p-2.5 lg:hidden flex items-center justify-center relative overflow-hidden"
           aria-label="Toggle menu"
           onClick={() => setOpen((o) => !o)}
         >
-          <div className="space-y-1.5">
-            <span className="block h-0.5 w-6 bg-kasavu" />
-            <span className="block h-0.5 w-6 bg-kasavu" />
-            <span className="block h-0.5 w-4 bg-kasavu" />
+          <div className="relative w-6 h-4 flex flex-col justify-between">
+            <span
+              className={`block h-0.5 w-6 bg-kasavu rounded-full transform transition-all duration-300 origin-center ${
+                open ? "rotate-45 translate-y-[7px]" : ""
+              }`}
+            />
+            <span
+              className={`block h-0.5 w-6 bg-kasavu rounded-full transform transition-all duration-300 ${
+                open ? "opacity-0 -translate-x-3" : ""
+              }`}
+            />
+            <span
+              className={`block h-0.5 bg-kasavu rounded-full transform transition-all duration-300 origin-center ${
+                open ? "-rotate-45 -translate-y-[7px] w-6" : "w-4"
+              }`}
+            />
           </div>
         </button>
       </div>
 
-      {open && (
-        <div className="border-t border-white/10 bg-black/90 px-4 pb-4 pt-2 lg:hidden">
-          {LINKS.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              onClick={() => setOpen(false)}
-              className={({ isActive }) =>
-                `block py-2 font-display text-xs font-semibold tracking-wider uppercase ${
-                  isActive ? "text-kasavu" : "text-ivory/80"
-                }`
-              }
-            >
-              {link.label}
-            </NavLink>
-          ))}
-          {/* Mobile Social Links */}
-          <div className="mt-4 flex gap-4 border-t border-white/5 pt-3">
-            <a href="https://www.instagram.com/onam.avv/" target="_blank" rel="noreferrer" className="text-kasavu hover:text-maroon transition-colors p-1">
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-              </svg>
-            </a>
-            <a href="https://wa.me/917994083820" target="_blank" rel="noreferrer" className="text-kasavu hover:text-maroon transition-colors p-1">
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
-              </svg>
-            </a>
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="overflow-hidden border-t border-white/10 bg-transparent px-6 pb-6 pt-3 lg:hidden"
+          >
+            {LINKS.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                onClick={() => setOpen(false)}
+                className={({ isActive }) =>
+                  `block py-2.5 text-center font-display text-xs font-semibold tracking-wider uppercase ${
+                    isActive ? "text-kasavu" : "text-ivory/80"
+                  }`
+                }
+              >
+                {link.label}
+              </NavLink>
+            ))}
+            {/* Mobile Social Links */}
+            <div className="mt-4 flex justify-center gap-6 border-t border-white/5 pt-4">
+              <a href="https://www.instagram.com/onam.avv/" target="_blank" rel="noreferrer" className="text-kasavu hover:text-maroon transition-colors p-1">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                </svg>
+              </a>
+              <a href="https://wa.me/917994083820" target="_blank" rel="noreferrer" className="text-kasavu hover:text-maroon transition-colors p-1">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+                </svg>
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }

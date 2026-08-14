@@ -70,7 +70,7 @@ function generateRiverPath(count, rowHeight) {
 }
 
 export default function Timeline() {
-  const { data: rawItems } = useApi("/timeline", FALLBACK_LINEUP);
+  const { data: rawItems, loading } = useApi("/timeline", FALLBACK_LINEUP);
   const items = Array.isArray(rawItems) ? rawItems : FALLBACK_LINEUP;
   
   // Cache check: Filter display items to show only Movie Night
@@ -121,25 +121,22 @@ export default function Timeline() {
         )}
       </div>
 
-      {/* Empty State when no events exist */}
-      {displayItems.length === 0 ? (
+      {/* Loading state or Empty State when no events exist */}
+      {loading ? (
+        <div className="flex h-40 items-center justify-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-kasavu border-t-transparent" />
+        </div>
+      ) : displayItems.length === 0 ? (
         <div className="mx-auto my-12 max-w-xl rounded-3xl border border-dashed border-kasavu/30 bg-black/40 p-12 text-center backdrop-blur-xl">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-kasavu/30 bg-kasavu/10">
             <svg className="h-8 w-8 text-kasavu" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           </div>
-          <h3 className="font-display text-2xl font-bold text-ivory">No Events Published Yet</h3>
+          <h3 className="font-display text-2xl font-bold text-ivory">No Events Scheduled</h3>
           <p className="mt-2 text-sm text-ivory/60">
-            Festival coordinators can publish and manage schedule tiles from the Coordinator Portal.
+            Check back later for updates on the festival lineup.
           </p>
-          <Link
-            to="/coordinator"
-            className="mt-6 inline-flex items-center gap-2 rounded-full border border-kasavu bg-kasavu/20 px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-kasavu hover:bg-kasavu hover:text-black transition-all duration-300"
-          >
-            <span>Go to Coordinator Portal</span>
-            <span>→</span>
-          </Link>
         </div>
       ) : (
         /* Alternating Vertical Timeline with Glowing Kasavu Thread */
