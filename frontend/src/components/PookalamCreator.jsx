@@ -336,6 +336,38 @@ export default function PookalamCreator() {
     URL.revokeObjectURL(url);
   };
 
+  const handleDownloadPNG = () => {
+    if (!svgRef.current) return;
+    const width = 360;
+    const height = 360;
+    const clone = svgRef.current.cloneNode(true);
+    clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    
+    const svgString = new XMLSerializer().serializeToString(clone);
+    const svgBlob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+    const URL = window.URL || window.webkitURL || window;
+    const blobURL = URL.createObjectURL(svgBlob);
+    
+    const image = new Image();
+    image.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = width * 3; 
+      canvas.height = height * 3;
+      const context = canvas.getContext("2d");
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      
+      const imageURI = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.href = imageURI;
+      link.download = "aarpo-my-pookalam.png";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(blobURL);
+    };
+    image.src = blobURL;
+  };
+
   return (
     <section className="mx-auto max-w-6xl px-4 sm:px-6 py-16 border-t border-kasavu/10">
       <div className="mb-12 text-center">
@@ -564,8 +596,8 @@ export default function PookalamCreator() {
 
           {/* Action Board Buttons */}
           <div className="pt-6 border-t border-kasavu/10 flex flex-col sm:flex-row gap-3">
-            <RippleButton onClick={handleDownloadSVG} className="flex-1">
-              💾 Export Pookalam to SVG
+            <RippleButton onClick={handleDownloadPNG} className="flex-1">
+              🖼️ Export PNG
             </RippleButton>
             <button
               type="button"
