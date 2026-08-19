@@ -10,7 +10,6 @@ import EventsPage from "./pages/EventsPage.jsx";
 import MovieEventPage from "./pages/MovieEventPage.jsx";
 import DJEventPage from "./pages/DJEventPage.jsx";
 import StorePage from "./pages/StorePage.jsx";
-import GalleryPage from "./pages/GalleryPage.jsx";
 import UpdatesPage from "./pages/UpdatesPage.jsx";
 import CoordinatorPage from "./pages/CoordinatorPage.jsx";
 import EventRegisterPage from "./pages/EventRegisterPage.jsx";
@@ -197,7 +196,6 @@ export default function App() {
             <Route path="/events/:id/register" element={<AnimatedPage><EventRegisterPage /></AnimatedPage>} />
             <Route path="/coordinator" element={<AnimatedPage><CoordinatorPage /></AnimatedPage>} />
             <Route path="/store" element={<AnimatedPage><StorePage /></AnimatedPage>} />
-            <Route path="/gallery" element={<AnimatedPage><GalleryPage /></AnimatedPage>} />
             <Route path="/updates" element={<AnimatedPage><UpdatesPage /></AnimatedPage>} />
             <Route path="*" element={<AnimatedPage><NotFoundPage /></AnimatedPage>} />
           </Routes>

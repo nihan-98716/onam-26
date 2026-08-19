@@ -73,14 +73,21 @@ export default function Timeline() {
   const { data: rawItems, loading } = useApi("/timeline", FALLBACK_LINEUP);
   const items = Array.isArray(rawItems) ? rawItems : FALLBACK_LINEUP;
   
-  // Cache check: Filter display items to show only Movie Night
-  const displayItems = items.filter((item) => item.title === "Movie Night");
-  const [filter, setFilter] = useState("all");
+  // Tab Filters: 19th August, 20th August, Past Events
+  const [filter, setFilter] = useState("19th");
+  const [selectedPoster, setSelectedPoster] = useState(null);
 
-  const filteredItems = displayItems.filter((item) => {
-    if (filter === "booking") return item.link || item.registrationRequired;
-    if (filter === "main") return item.time?.includes("20 July");
-    return true;
+  const filteredItems = items.filter((item) => {
+    if (filter === "19th") {
+      return item.time?.includes("19 August") || item.time?.includes("19th August");
+    }
+    if (filter === "20th") {
+      return item.time?.includes("20 August") || item.time?.includes("20th August");
+    }
+    if (filter === "past") {
+      return item.title?.toLowerCase().includes("movie night");
+    }
+    return false;
   });
 
   return (
@@ -97,28 +104,26 @@ export default function Timeline() {
           Explore all live festival events, competitions, and entertainment nights managed by event coordinators.
         </p>
 
-        {/* Filter Tabs (only if items exist and there is more than one) */}
-        {displayItems.length > 1 && (
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            {[
-              { id: "all", label: "All Events" },
-              { id: "main", label: "Main Day (20 July)" },
-              { id: "booking", label: "Ticketed & Registration" },
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setFilter(tab.id)}
-                className={`rounded-full px-5 py-2 text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${
-                  filter === tab.id
-                    ? "border border-kasavu bg-kasavu/20 text-kasavu shadow-[0_0_20px_rgba(212,175,55,0.25)]"
-                    : "border border-white/10 bg-white/5 text-ivory/60 hover:border-kasavu/40 hover:text-ivory"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-        )}
+        {/* Filter Tabs */}
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          {[
+            { id: "19th", label: "19th August" },
+            { id: "20th", label: "20th August" },
+            { id: "past", label: "Past Events" },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setFilter(tab.id)}
+              className={`rounded-full px-5 py-2 text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${
+                filter === tab.id
+                  ? "border border-kasavu bg-kasavu/20 text-kasavu shadow-[0_0_20px_rgba(212,175,55,0.25)]"
+                  : "border border-white/10 bg-white/5 text-ivory/60 hover:border-kasavu/40 hover:text-ivory"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Loading state or Empty State when no events exist */}
@@ -126,7 +131,7 @@ export default function Timeline() {
         <div className="flex h-40 items-center justify-center">
           <div className="h-8 w-8 animate-spin rounded-full border-2 border-kasavu border-t-transparent" />
         </div>
-      ) : displayItems.length === 0 ? (
+      ) : filteredItems.length === 0 ? (
         <div className="mx-auto my-12 max-w-xl rounded-3xl border border-dashed border-kasavu/30 bg-black/40 p-12 text-center backdrop-blur-xl">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-kasavu/30 bg-kasavu/10">
             <svg className="h-8 w-8 text-kasavu" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -202,7 +207,8 @@ export default function Timeline() {
           <motion.div layout className="space-y-0">
             <AnimatePresence mode="popLayout">
               {filteredItems.map((item, index) => {
-                const targetLink = item.link || (item.registrationRequired ? `/events/${item.id}/register` : null);
+                const isMovieNight = item.title?.toLowerCase().includes("movie night");
+                const targetLink = isMovieNight ? null : (item.link || (item.registrationRequired ? `/events/${item.id}/register` : null));
                 const isBooking = Boolean(targetLink);
                 const CardWrapper = isBooking ? Link : "div";
                 const wrapperProps = isBooking ? { to: targetLink } : {};
@@ -240,12 +246,17 @@ export default function Timeline() {
                               <img
                                 src={item.poster}
                                 alt={item.title}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  setSelectedPoster({ src: item.poster, title: item.title });
+                                }}
                                 onError={(e) => {
                                   e.currentTarget.style.display = "none";
                                   const fallback = e.currentTarget.parentElement.querySelector(".poster-fallback");
                                   if (fallback) fallback.classList.remove("hidden");
                                 }}
-                                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 cursor-zoom-in"
                               />
                             ) : null}
 
@@ -297,7 +308,11 @@ export default function Timeline() {
                             <span>{item.venue || "Campus Venue"}</span>
                           </div>
 
-                          {isBooking ? (
+                          {isMovieNight ? (
+                            <span className="inline-flex items-center gap-1.5 rounded-full border border-red-500/35 bg-red-500/10 px-4 py-1.5 text-xs font-bold text-red-400 shadow-sm">
+                              🛑 Bookings Closed
+                            </span>
+                          ) : isBooking ? (
                             <span className="inline-flex items-center gap-2 rounded-full border border-kasavu/40 bg-kasavu/20 px-4 py-1.5 text-xs font-bold text-kasavu shadow-sm transition-all duration-300 group-hover:bg-kasavu group-hover:text-black">
                               {item.badge || (item.registrationRequired ? (item.paymentRequired ? `Register • ₹${item.price}` : "Register Free") : "Book Ticket")}
                               <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
@@ -330,6 +345,43 @@ export default function Timeline() {
           </motion.div>
         </div>
       )}
+
+      {/* Poster Lightbox Popup */}
+      <AnimatePresence>
+        {selectedPoster && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-md"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedPoster(null)}
+          >
+            <button
+              onClick={() => setSelectedPoster(null)}
+              className="absolute right-6 top-6 rounded-full border border-white/20 bg-noir/70 p-3 text-ivory hover:bg-white/10 text-xl font-bold leading-none z-[60]"
+              aria-label="Close"
+            >
+              ×
+            </button>
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative max-h-[85vh] max-w-3xl overflow-hidden rounded-3xl border border-kasavu/30 bg-[#0c0a09]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={selectedPoster.src}
+                alt={selectedPoster.title}
+                className="max-h-[70vh] w-auto max-w-full object-contain mx-auto"
+              />
+              <div className="bg-noir/95 p-5 text-center border-t border-white/10">
+                <h4 className="font-display text-xl font-bold text-kasavu">{selectedPoster.title}</h4>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

@@ -5,21 +5,25 @@ const BLOCKS = [
     title: "What is Aarpo?",
     body: "Aarpo is Amrita Chennai's annual Onam celebration — days where the campus becomes a courtyard of kasavu and lamplight, food and music, brought together by every department on campus.",
     tone: "gold",
+    image: "/images/whatisaarpo.png"
   },
   {
     title: "The Importance of Onam",
     body: "Onam marks the harvest and the Malayalam new year, a festival of gratitude that crosses caste and creed. It is Kerala's most unifying celebration, and Aarpo brings that same spirit to campus life.",
     tone: "maroon",
+    image: "/images/importance.png"
   },
   {
     title: "The Return of Mahabali",
     body: "Legend holds that King Mahabali returns each Onam to see his people thriving. Aarpo's procession honours that homecoming — a reminder that the festival is, at its heart, about welcome.",
     tone: "gold",
+    image: "/images/return.png"
   },
   {
     title: "A Spirit of Unity",
     body: "Students, faculty and staff plan, cook, perform and compete together. Aarpo isn't staged for an audience — it's built by the same people who'll spend the next few days enjoying it.",
     tone: "maroon",
+    image: "/images/unity.png"
   },
 ];
 
@@ -56,8 +60,14 @@ export default function About() {
             }`}
           >
             <div
-              className={`h-56 w-full flex-shrink-0 rounded-3xl bg-gradient-to-br ${toneMap[b.tone]} md:w-72 float-card`}
-            />
+              className={`h-56 w-full flex-shrink-0 rounded-3xl bg-gradient-to-br ${toneMap[b.tone]} md:w-72 float-card overflow-hidden`}
+            >
+              <img
+                src={b.image}
+                alt={b.title}
+                className="h-full w-full object-cover opacity-90 hover:opacity-100 transition-opacity duration-300"
+              />
+            </div>
             <div>
               <h3 className="font-display text-2xl font-bold text-ivory sm:text-3xl">
                 {b.title}
